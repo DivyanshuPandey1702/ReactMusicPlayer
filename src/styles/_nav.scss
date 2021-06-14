@@ -1,0 +1,45 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 12vh;
+  padding: 1rem;
+  h1 {
+    font-family: "Pacifico", cursive;
+    font-size: 3.5rem;
+  }
+  button {
+    font-size: 1rem;
+    background: rgb(27, 30, 43);
+    color: white;
+    border: 0.5rem solid rgb(27, 30, 43);
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s ease;
+    &:hover {
+      background: rgb(41, 45, 62);
+      border: 0.5rem solid rgb(41, 45, 62);
+    }
+    &:active {
+      background: rgb(27, 30, 43);
+      border: 0.5rem solid rgb(27, 30, 43);
+      opacity: 0.8;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    button {
+      z-index: 10;
+      background: rgb(41, 45, 62);
+      border: 0.5rem solid rgb(41, 45, 62);
+      &:hover {
+        background: rgb(128, 203, 196);
+        border: 0.5rem solid rgb(128, 203, 196);
+      }
+    }
+  }
+}
