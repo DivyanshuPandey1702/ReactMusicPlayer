@@ -99,7 +99,11 @@ function App() {
           onEnded={onSongEndHandler}
         ></audio>
       </div>
-      <div className={`${loadingStatus ? "loader-animation" : ""}`}>
+      <div
+        className={`${
+          loadingStatus ? "loader-animation" : "hide-loading-animation"
+        }`}
+      >
         <div className="dot-pulse"></div>
       </div>
     </div>
