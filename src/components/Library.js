@@ -26,6 +26,9 @@ function Library({
             key={song.id}
           />
         ))}
+        <footer>
+          <div>Made By Divyanshu Pandey</div>
+        </footer>
       </div>
     </div>
   );

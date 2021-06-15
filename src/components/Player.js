@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
   faAngleLeft,
   faAngleRight,
   faPause,
+  faRandom,
+  faVolumeUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { getNewSongs } from "../util";
 
@@ -18,7 +20,10 @@ function Player({
   songs,
   setCurrSong,
   setSongs,
+  shuffleStatus,
+  setShuffleStatus,
 }) {
+  const [volOn, setVolOn] = useState(true);
   // Event Handler
   const playSongHandler = () => {
     if (isPlaying) {
@@ -44,21 +49,45 @@ function Player({
     const currIndex = songs.findIndex((song) => song.id === currSong.id);
     const length = songs.length;
     if (direction === "skip-back") {
-      await setCurrSong(songs[currIndex !== 0 ? currIndex - 1 : length - 1]);
-      getNewSongs(
-        songs,
-        songs[currIndex !== 0 ? currIndex - 1 : length - 1],
-        setSongs
-      );
+      if (shuffleStatus) {
+        const n = Math.floor(Math.random() * length);
+        await setCurrSong(songs[n]);
+        getNewSongs(songs, songs[n], setSongs);
+      } else {
+        await setCurrSong(songs[currIndex !== 0 ? currIndex - 1 : length - 1]);
+        getNewSongs(
+          songs,
+          songs[currIndex !== 0 ? currIndex - 1 : length - 1],
+          setSongs
+        );
+      }
     } else {
-      await setCurrSong(songs[currIndex !== length - 1 ? currIndex + 1 : 0]);
-      getNewSongs(
-        songs,
-        songs[currIndex !== length - 1 ? currIndex + 1 : 0],
-        setSongs
-      );
+      if (shuffleStatus) {
+        const n = Math.floor(Math.random() * length);
+        await setCurrSong(songs[n]);
+        getNewSongs(songs, songs[n], setSongs);
+      } else {
+        await setCurrSong(songs[currIndex !== length - 1 ? currIndex + 1 : 0]);
+        getNewSongs(
+          songs,
+          songs[currIndex !== length - 1 ? currIndex + 1 : 0],
+          setSongs
+        );
+      }
     }
     if (isPlaying) audioRef.current.play();
+  };
+
+  const changeVolumeHandler = (e) => {
+    audioRef.current.volume = e.target.value / 100;
+  };
+
+  const volOnHandler = () => {
+    if (volOn === true) {
+      setVolOn(false);
+    } else {
+      setVolOn(true);
+    }
   };
 
   window.addEventListener("keypress", (e) => {
@@ -99,6 +128,11 @@ function Player({
       </div>
       <div className="play-control">
         <FontAwesomeIcon
+          icon={faRandom}
+          onClick={() => setShuffleStatus(!shuffleStatus)}
+          className={`${shuffleStatus ? "shuffle-color" : ""}`}
+        />
+        <FontAwesomeIcon
           onClick={() => skipTrackHandler("skip-back")}
           className="skip-back"
           size="2x"
@@ -115,6 +149,20 @@ function Player({
           className="skip-forward"
           size="2x"
           icon={faAngleRight}
+        />
+        <FontAwesomeIcon
+          icon={faVolumeUp}
+          onClick={volOnHandler}
+          className={`${volOn ? "" : "shuffle-color"}`}
+        />
+      </div>
+      <div className={`volume-control ${volOn ? "vol-on" : ""}`}>
+        <input
+          type="range"
+          onChange={changeVolumeHandler}
+          min="0"
+          max="100"
+          placeholder="Volume Control"
         />
       </div>
     </div>

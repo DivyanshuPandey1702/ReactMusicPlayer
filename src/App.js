@@ -22,6 +22,8 @@ function App() {
     animationPercentage: 0,
   });
   const [libraryStatus, setLibraryStatus] = useState(false);
+  const [shuffleStatus, setShuffleStatus] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(true);
 
   const timeUpdateHandler = (e) => {
     const current = e.target.currentTime;
@@ -38,11 +40,19 @@ function App() {
   };
 
   const onSongEndHandler = async () => {
-    const currIndex = songs.findIndex((song) => song.id === currSong.id);
     const length = songs.length;
-    await setCurrSong(songs[currIndex !== length - 1 ? currIndex + 1 : 0]);
+    const currIndex = songs.findIndex((song) => song.id === currSong.id);
+    if (shuffleStatus) {
+      await setCurrSong(songs[Math.floor(Math.random() * length)]);
+    } else {
+      await setCurrSong(songs[currIndex !== length - 1 ? currIndex + 1 : 0]);
+    }
     if (isPlaying) audioRef.current.play();
   };
+
+  window.addEventListener("load", () => {
+    setLoadingStatus(false);
+  });
 
   return (
     <div
@@ -50,7 +60,7 @@ function App() {
       style={{
         background: `linear-gradient(to bottom right, ${currSong.color[0]}, ${currSong.color[1]})`,
         height: "100vh",
-        transition: "1s ease",
+        transition: "all .5s ease",
       }}
     >
       <div style={{ background: "rgba(41, 45, 62, .8)", height: "100vh" }}>
@@ -69,6 +79,8 @@ function App() {
           songs={songs}
           setCurrSong={setCurrSong}
           setSongs={setSongs}
+          shuffleStatus={shuffleStatus}
+          setShuffleStatus={setShuffleStatus}
         />
         <Library
           songs={songs}
@@ -86,9 +98,9 @@ function App() {
           src={currSong.audio}
           onEnded={onSongEndHandler}
         ></audio>
-        <footer>
-          <div>Made By Divyanshu Pandey</div>
-        </footer>
+      </div>
+      <div className={`${loadingStatus ? "loader-animation" : ""}`}>
+        <div className="dot-pulse"></div>
       </div>
     </div>
   );
