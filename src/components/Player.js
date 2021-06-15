@@ -130,30 +130,30 @@ function Player({
         <FontAwesomeIcon
           icon={faRandom}
           onClick={() => setShuffleStatus(!shuffleStatus)}
-          className={`${shuffleStatus ? "shuffle-color" : ""}`}
+          className={`icon-hover ${shuffleStatus ? "shuffle-color" : ""}`}
         />
         <FontAwesomeIcon
           onClick={() => skipTrackHandler("skip-back")}
-          className="skip-back"
+          className="skip-back icon-hover"
           size="2x"
           icon={faAngleLeft}
         />
         <FontAwesomeIcon
           onClick={playSongHandler}
-          className="play"
+          className="play icon-hover"
           size="2x"
           icon={isPlaying ? faPause : faPlay}
         />
         <FontAwesomeIcon
           onClick={() => skipTrackHandler("skip-forward")}
-          className="skip-forward"
+          className="skip-forward icon-hover"
           size="2x"
           icon={faAngleRight}
         />
         <FontAwesomeIcon
           icon={faVolumeUp}
           onClick={volOnHandler}
-          className={`${volOn ? "" : "shuffle-color"}`}
+          className={`icon-hover ${volOn ? "" : "shuffle-color"}`}
         />
       </div>
       <div className={`volume-control ${volOn ? "vol-on" : ""}`}>
